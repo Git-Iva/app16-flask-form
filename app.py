@@ -12,7 +12,9 @@ app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
 app.config["MAIL_USERNAME"] = "my.contactapp.il@gmail.com"
-app.config["MAIL_PASSWORD"] = "mojm gogd izuh wjwu "
+app.config["MAIL_PASSWORD"] = "mojm gogd izuh wjwu"
+
+# Link database to the app
 db = SQLAlchemy(app)
 
 # Connect mail instance to the app
@@ -45,9 +47,11 @@ def index():
         db.session.add(form)
         db.session.commit()
 
+        # Send email upon successful form submission
         message_body = f"Thank you for your submission, {first_name}.\n" \
                        f"Here is your info:\n{first_name}\n{last_name}\n{date}\n"\
                        f"Thank you"
+
         message = Message(subject="New form submission",
                           sender=app.config["MAIL_USERNAME"],
                           recipients=[email],
@@ -57,7 +61,6 @@ def index():
         mail.send(message)
 
         flash("Your form was submitted successfully!", "success")
-
 
     return render_template("index.html")
 
